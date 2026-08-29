@@ -35,7 +35,6 @@ const Product = () => {
   const [productData, setProductData] = useState<ProductType | null>(null);
   const [loading, setLoading] = useState(true);
   const [allProducts, setAllProducts] = useState<ProductType[]>([]);
-  const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +69,6 @@ const Product = () => {
         setProductData(product ?? null);
         setAllProducts(products);
         setSelectedImage(0);
-        setQuantity(1);
       } catch (err) {
         if (!isMounted) return;
 
