@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs"; // ou 'bcrypt'
 
 const prisma = new PrismaClient();
 
@@ -164,7 +165,26 @@ async function main() {
       });
     }
   }
+  // Criação do Administrador na tabela correta 'Admin' usando 'passwordHash'
+  const adminEmail = process.env.ADMIN_SEED_EMAIL || "mpvertiseoficial@gmail.com";
+  const rawPassword = process.env.ADMIN_SEED_PASSWORD || "MaraMpVertise2026@";
 
+  // Gera o hash real com bcrypt que a rota de login valida
+  const passwordHash = await bcrypt.hash(rawPassword, 10)
+
+  await prisma.admin.upsert({
+    where: { email: adminEmail },
+    update: {
+      passwordHash: passwordHash,
+    },
+    create: {
+      name: "Administrador",
+      email: adminEmail,
+      passwordHash: passwordHash,
+    },
+  });
+
+  console.log("Usuário Admin criado/atualizado com sucesso na tabela Admin.");
   console.log("Seed concluído com sucesso.");
 }
 
