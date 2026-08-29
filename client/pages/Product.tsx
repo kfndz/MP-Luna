@@ -344,50 +344,6 @@ const Product = () => {
                   )}
                 </div>
 
-                {/* Quantidade */}
-                {isInStock && (
-                  <div className="mb-8">
-                    <label className="mb-3 block text-sm font-semibold">
-                      Quantidade
-                    </label>
-
-                    <div className="flex w-fit items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setQuantity((current) => Math.max(1, current - 1))
-                        }
-                        disabled={quantity <= 1}
-                        aria-label="Diminuir quantidade"
-                        className="h-11 w-11 rounded-xl border border-border transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        −
-                      </button>
-
-                      <span className="w-12 text-center font-semibold">
-                        {quantity}
-                      </span>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setQuantity((current) =>
-                            Math.min(
-                              stock > 0 ? stock : current + 1,
-                              current + 1,
-                            ),
-                          )
-                        }
-                        disabled={stock > 0 && quantity >= stock}
-                        aria-label="Aumentar quantidade"
-                        className="h-11 w-11 rounded-xl border border-border transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                )}
-
                 {/* Botões */}
                 <div className="mb-8 flex flex-col gap-3 sm:flex-row">
                   <a
