@@ -18,7 +18,7 @@ Uma plataforma full-stack de curadoria e divulgação de produtos afiliados volt
 
 **Website / Site**
 
-https://mp-vertise-chi.vercel.app/
+https://mp-vertise.vercel.app/
 
 ---
 
