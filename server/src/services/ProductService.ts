@@ -13,6 +13,8 @@ type ProductInput = {
   affiliateUrl: string;
   marketplace: string;
   image: string;
+  images?: string[];
+  videos?: string[];
   rating?: number | string | null;
   reviewCount?: number | string | null;
   stock?: number | string | null;
@@ -104,6 +106,8 @@ async function prepareProductData(input: ProductInput) {
     affiliateUrl: input.affiliateUrl.trim(),
     marketplace: input.marketplace.trim(),
     image: input.image.trim(),
+    images: (input.images ?? []).map((value) => value.trim()).filter(Boolean),
+    videos: (input.videos ?? []).map((value) => value.trim()).filter(Boolean),
     rating:
       input.rating === undefined ||
       input.rating === null ||
@@ -166,6 +170,8 @@ export const ProductService = {
       affiliateUrl: input.affiliateUrl ?? existingProduct.affiliateUrl,
       marketplace: input.marketplace ?? existingProduct.marketplace,
       image: input.image ?? existingProduct.image,
+      images: input.images ?? existingProduct.images ?? [],
+      videos: input.videos ?? existingProduct.videos ?? [],
       rating:
         input.rating !== undefined
           ? input.rating

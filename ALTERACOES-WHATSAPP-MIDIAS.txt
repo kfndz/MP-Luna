@@ -1,0 +1,57 @@
+MP VERTISE - ALTERAÇÕES DE WHATSAPP, FOTOS E VÍDEOS
+
+1. IDENTIDADE VISUAL
+- A versão foi feita somente sobre a MP Vertise.
+- Header, footer, logo, cores e identidade visual originais da MP Vertise foram preservados.
+
+2. GRUPO DO WHATSAPP
+No seu .env atual, mantenha todas as configurações existentes e adicione no final:
+
+VITE_WHATSAPP_GROUP_URL="https://chat.whatsapp.com/IQ1F1WtBK43HXDvR4qMS4j?s=cl&p=a&ilr=4"
+VITE_WHATSAPP_PROMO_IMAGE="/images/grupo-whatsapp.jpeg"
+
+A imagem de divulgação deve existir em:
+public/images/grupo-whatsapp.jpeg
+
+3. FOTOS E VÍDEOS DOS PRODUTOS
+- É possível cadastrar várias fotos.
+- A primeira foto é a capa.
+- É possível adicionar vários vídeos.
+- Vídeos podem ser enviados diretamente do computador ou adicionados por link.
+- Formatos de upload: MP4, WEBM, MOV, M4V e OGG.
+- Limite configurado: 500 MB por vídeo.
+
+4. ARMAZENAMENTO DOS VÍDEOS
+Não há dependência de Vercel Blob, Cloudinary, S3 ou outro serviço externo.
+
+Por padrão, o servidor salva os vídeos em:
+storage/uploads/videos/
+
+Eles são disponibilizados pelo sistema em URLs como:
+/uploads/videos/arquivo.mp4
+
+No banco é salvo somente esse caminho/URL, não o arquivo inteiro.
+
+Opcionalmente, na Hostinger você pode definir no .env uma pasta persistente fora da pasta de deploy:
+UPLOADS_DIR="/caminho/persistente/uploads"
+
+Isso é recomendado se o processo de atualização/deploy substituir os arquivos da aplicação.
+
+IMPORTANTE SOBRE A VERCEL:
+A Vercel usa funções/serverless e não fornece disco persistente para este tipo de upload local.
+Enquanto o projeto estiver hospedado temporariamente nela, o restante do site pode ser testado, mas o upload local de vídeos deve ser validado localmente ou depois em um servidor com disco persistente, como a Hostinger. Vídeos por link continuam funcionando normalmente.
+
+5. BANCO EXISTENTE
+A migration criada apenas adiciona os campos images e videos à tabela Product.
+Ela não recria nem apaga os produtos existentes.
+
+Aplique no ambiente que aponta para o banco correto:
+
+npx prisma migrate deploy --schema=server/prisma/schema.prisma
+npx prisma generate --schema=server/prisma/schema.prisma
+
+6. PARA RODAR LOCALMENTE
+npm install
+npm run dev
+
+O upload local de vídeo funcionará no ambiente local e, futuramente, no servidor Hostinger.

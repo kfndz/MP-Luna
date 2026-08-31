@@ -84,6 +84,16 @@ async function prepareProductData(body: any, existingProduct?: any) {
 
   const image = String(body.image ?? existingProduct?.image ?? "").trim();
 
+  const rawImages = body.images !== undefined ? body.images : existingProduct?.images ?? [];
+  const images = Array.isArray(rawImages)
+    ? rawImages.map((value) => String(value).trim()).filter(Boolean)
+    : [];
+
+  const rawVideos = body.videos !== undefined ? body.videos : existingProduct?.videos ?? [];
+  const videos = Array.isArray(rawVideos)
+    ? rawVideos.map((value) => String(value).trim()).filter(Boolean)
+    : [];
+
   if (!affiliateUrl) throw new Error("Link de afiliado é obrigatório.");
   if (!marketplace) throw new Error("Marketplace é obrigatório.");
   if (!image) throw new Error("Imagem é obrigatória.");
@@ -113,6 +123,8 @@ async function prepareProductData(body: any, existingProduct?: any) {
     affiliateUrl,
     marketplace,
     image,
+    images: images.length > 0 ? images : [image],
+    videos,
     rating:
       body.rating !== undefined
         ? body.rating === null || body.rating === ""

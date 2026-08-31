@@ -57,6 +57,8 @@ model Product {
   priceCheckedAt    DateTime?
   availability      String       @default("AVAILABLE")
   image             String
+  images            String[]     @default([])
+  videos            String[]     @default([])
   rating            Float?
   reviewCount       Int?
   stock             Int          @default(0)

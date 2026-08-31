@@ -11,7 +11,7 @@ import type {
   ProductCreateInput,
 } from "@/types/product";
 
-import ImageUpload from "./ImageUpload";
+import ProductMediaUpload from "./ProductMediaUpload";
 
 type Props = {
   product?: Product | null;
@@ -62,7 +62,8 @@ export default function ProductForm({
   const [rating, setRating] = useState<number | undefined>();
   const [reviewCount, setReviewCount] = useState<number | undefined>();
 
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [videos, setVideos] = useState<string[]>([]);
   const [badge, setBadge] = useState("");
 
   const [featured, setFeatured] = useState(false);
@@ -101,7 +102,15 @@ export default function ProductForm({
 
       setReviewCount(product.reviewCount ?? product.reviews ?? undefined);
 
-      setImage(product.image || "");
+      const productImages = (product.images ?? []).filter(Boolean);
+      setImages(
+        productImages.length > 0
+          ? productImages
+          : product.image
+            ? [product.image]
+            : [],
+      );
+      setVideos((product.videos ?? []).filter(Boolean));
       setBadge(product.badge || "");
       setFeatured(product.featured ?? false);
       setIsOffer(product.isOffer ?? false);
@@ -123,7 +132,8 @@ export default function ProductForm({
     setDescription("");
     setRating(undefined);
     setReviewCount(undefined);
-    setImage("");
+    setImages([]);
+    setVideos([]);
     setBadge("");
     setFeatured(false);
     setIsOffer(false);
@@ -173,7 +183,9 @@ export default function ProductForm({
       isBestSeller,
       badge: badge.trim() || undefined,
       description: description.trim(),
-      image,
+      image: images[0] ?? "",
+      images,
+      videos,
     };
 
     await onSave(input);
@@ -556,14 +568,19 @@ export default function ProductForm({
 
           <div>
             <label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Imagem do produto *
+              Fotos e vídeos do produto *
             </label>
 
-            <ImageUpload value={image} onChange={setImage} />
+            <ProductMediaUpload
+              images={images}
+              videos={videos}
+              onImagesChange={setImages}
+              onVideosChange={setVideos}
+            />
 
-            {!image && (
+            {images.length === 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
-                Selecione uma imagem para o produto.
+                Adicione pelo menos uma foto para o produto.
               </p>
             )}
           </div>
@@ -633,7 +650,7 @@ export default function ProductForm({
 
         <Button
           type="submit"
-          disabled={isSaving || !image}
+          disabled={isSaving || images.length === 0}
           className="min-h-11 w-full gap-2 rounded-xl sm:w-auto"
         >
           <Save className="h-4 w-4" />

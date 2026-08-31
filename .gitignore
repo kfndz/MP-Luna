@@ -32,3 +32,10 @@ dist-ssr
 !.env.example
 
 /backup-produtos-*.json
+
+# Arquivos enviados pelo painel (não versionar vídeos dos clientes)
+storage/uploads/*
+!storage/uploads/.gitkeep
+!storage/uploads/videos/
+storage/uploads/videos/*
+!storage/uploads/videos/.gitkeep

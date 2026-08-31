@@ -33,6 +33,7 @@ type ApiProduct = Omit<
   | "category"
   | "subcategory"
   | "images"
+  | "videos"
   | "reviews"
 > & {
   price: number | string;
@@ -42,6 +43,7 @@ type ApiProduct = Omit<
   subcategory?: ApiSubcategory | string | null;
 
   images?: Array<string | { url?: string | null }>;
+  videos?: string[];
 
   reviewCount?: number;
   reviews?: number;
@@ -62,6 +64,8 @@ function normalizeProduct(product: ApiProduct): Product {
         return image?.url ?? "";
       })
       .filter(Boolean) ?? [];
+
+  const normalizedVideos = product.videos?.filter(Boolean) ?? [];
 
   const mainImage =
     product.image ??
@@ -87,6 +91,8 @@ function normalizeProduct(product: ApiProduct): Product {
       normalizedImages.length > 0
         ? normalizedImages
         : [mainImage],
+
+    videos: normalizedVideos,
 
     rating: Number(product.rating ?? 0),
 

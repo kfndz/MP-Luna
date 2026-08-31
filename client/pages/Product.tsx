@@ -7,13 +7,16 @@ import {
   Shield,
   ShoppingCart,
   Star,
+  Play,
   Truck,
 } from "lucide-react";
 
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { getCategoryBySlug, getSubcategoryBySlug } from "@/lib/categories";
+import { WHATSAPP_GROUP_URL } from "@/lib/whatsapp";
 import { FavoriteService } from "@/services/FavoriteService";
 import { ProductService } from "@/services/ProductService";
 import type { Product as ProductType } from "@/types/product";
@@ -29,6 +32,35 @@ function formatPrice(value?: number | string | null) {
   }).format(numberValue);
 }
 
+function getVideoEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+
+    if (parsed.hostname.includes("youtube.com")) {
+      const id = parsed.searchParams.get("v");
+      return id ? `https://www.youtube.com/embed/${id}` : null;
+    }
+
+    if (parsed.hostname === "youtu.be") {
+      const id = parsed.pathname.replace(/^\//, "");
+      return id ? `https://www.youtube.com/embed/${id}` : null;
+    }
+
+    if (parsed.hostname.includes("vimeo.com")) {
+      const id = parsed.pathname.split("/").filter(Boolean).pop();
+      return id ? `https://player.vimeo.com/video/${id}` : null;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function isDirectVideo(url: string) {
+  return /\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(url);
+}
+
 const Product = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -36,6 +68,7 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const [allProducts, setAllProducts] = useState<ProductType[]>([]);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,6 +83,7 @@ const Product = () => {
           setError("Produto não encontrado.");
           setLoading(false);
           setSelectedImage(0);
+          setSelectedVideo(null);
         }
 
         return;
@@ -69,6 +103,7 @@ const Product = () => {
         setProductData(product ?? null);
         setAllProducts(products);
         setSelectedImage(0);
+        setSelectedVideo(null);
       } catch (err) {
         if (!isMounted) return;
 
@@ -259,26 +294,63 @@ const Product = () => {
               {/* Imagens */}
               <div className="space-y-4">
                 <div className="mx-auto aspect-square w-full max-w-[560px] overflow-hidden rounded-2xl border border-border bg-muted">
-                  <img
-                    src={images[selectedImage] ?? images[0]}
-                    alt={productData.name ?? "Produto"}
-                    onError={(event) => {
-                      event.currentTarget.src = "/images/home-image.webp";
-                    }}
-                    className="h-full w-full object-contain p-4 sm:p-6"
-                  />
+                  {selectedVideo ? (
+                    getVideoEmbedUrl(selectedVideo) ? (
+                      <iframe
+                        src={getVideoEmbedUrl(selectedVideo) ?? undefined}
+                        title={`Vídeo de ${productData.name}`}
+                        className="h-full w-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : isDirectVideo(selectedVideo) ? (
+                      <video
+                        src={selectedVideo}
+                        controls
+                        playsInline
+                        className="h-full w-full bg-black object-contain"
+                      />
+                    ) : (
+                      <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
+                        <Play className="h-10 w-10 text-accent" />
+                        <p className="text-sm text-muted-foreground">
+                          Este vídeo será aberto em uma nova aba.
+                        </p>
+                        <a
+                          href={selectedVideo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-xl bg-accent px-5 py-3 font-semibold text-white"
+                        >
+                          Abrir vídeo
+                        </a>
+                      </div>
+                    )
+                  ) : (
+                    <img
+                      src={images[selectedImage] ?? images[0]}
+                      alt={productData.name ?? "Produto"}
+                      onError={(event) => {
+                        event.currentTarget.src = "/images/home-image.webp";
+                      }}
+                      className="h-full w-full object-contain p-4 sm:p-6"
+                    />
+                  )}
                 </div>
 
-                {images.length > 1 && (
-                  <div className="mx-auto grid max-w-[560px] grid-cols-4 gap-2">
+                {(images.length > 1 || (productData.videos?.length ?? 0) > 0) && (
+                  <div className="mx-auto grid max-w-[560px] grid-cols-4 gap-2 sm:grid-cols-5">
                     {images.map((img, index) => (
                       <button
                         key={`${img}-${index}`}
                         type="button"
-                        onClick={() => setSelectedImage(index)}
+                        onClick={() => {
+                          setSelectedImage(index);
+                          setSelectedVideo(null);
+                        }}
                         aria-label={`Selecionar imagem ${index + 1}`}
                         className={`aspect-square overflow-hidden rounded-lg border-2 transition-colors ${
-                          selectedImage === index
+                          !selectedVideo && selectedImage === index
                             ? "border-accent"
                             : "border-border hover:border-muted-foreground"
                         }`}
@@ -291,6 +363,23 @@ const Product = () => {
                           }}
                           className="h-full w-full object-contain p-1"
                         />
+                      </button>
+                    ))}
+
+                    {(productData.videos ?? []).map((video, index) => (
+                      <button
+                        key={`${video}-${index}`}
+                        type="button"
+                        onClick={() => setSelectedVideo(video)}
+                        aria-label={`Selecionar vídeo ${index + 1}`}
+                        className={`flex aspect-square flex-col items-center justify-center gap-1 overflow-hidden rounded-lg border-2 bg-muted/60 p-2 text-xs font-medium transition-colors ${
+                          selectedVideo === video
+                            ? "border-accent text-accent"
+                            : "border-border text-muted-foreground hover:border-muted-foreground"
+                        }`}
+                      >
+                        <Play className="h-6 w-6" />
+                        Vídeo {index + 1}
                       </button>
                     ))}
                   </div>
@@ -397,6 +486,16 @@ const Product = () => {
                     </span>
                   </button>
                 </div>
+
+                <a
+                  href={WHATSAPP_GROUP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mb-8 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#25D366]/35 bg-[#25D366]/10 px-5 py-3 font-semibold text-foreground transition hover:border-[#25D366]/60 hover:bg-[#25D366]/15 active:scale-[0.99]"
+                >
+                  <WhatsAppIcon className="h-5 w-5 text-[#25D366]" />
+                  Entrar no grupo de promoções
+                </a>
 
                 {/* Descrição */}
                 {productData.description && (

@@ -1,3 +1,4 @@
+import promoImg from "../public/images/grupo-whatsapp.jpeg";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -13,9 +14,11 @@ import {
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ProductCard } from "@/components/catalog/ProductCard";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { SectionHeader } from "@/components/catalog/SectionHeader";
 import { useProducts } from "@/hooks/useProducts";
 import { sortProducts } from "@/utils/productSorting";
+import { WHATSAPP_GROUP_URL, WHATSAPP_PROMO_IMAGE } from "@/lib/whatsapp";
 
 const carouselImages = [
   {
@@ -257,6 +260,42 @@ const Index = () => {
                 </div>
 
                 <div className="absolute -bottom-6 -right-6 h-40 w-40 rounded-2xl bg-accent-secondary opacity-20 blur-3xl" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Grupo de promoções */}
+        <section className="pb-4 pt-2 sm:pb-8 sm:pt-4">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
+              <div className="bg-muted/30 p-2 sm:p-3">
+                <img
+                  src={promoImg}
+                  alt="Grupo de promoções da MP Vertise no WhatsApp"
+                  className="mx-auto max-h-[560px] w-full rounded-2xl object-contain"
+                />
+              </div>
+
+              <div className="flex flex-col items-center gap-3 px-5 py-5 text-center sm:px-8 sm:py-6">
+                <div>
+                  <h2 className="text-xl font-bold text-foreground sm:text-2xl">
+                    Promoções direto no WhatsApp
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                    Entre no grupo para receber achados, cupons e ofertas selecionadas pela MP Vertise.
+                  </p>
+                </div>
+
+                <a
+                  href={WHATSAPP_GROUP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-12 w-full max-w-sm items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-semibold text-white transition hover:brightness-95 active:scale-[0.98]"
+                >
+                  <WhatsAppIcon className="h-5 w-5" />
+                  Entrar no grupo de promoções
+                </a>
               </div>
             </div>
           </div>

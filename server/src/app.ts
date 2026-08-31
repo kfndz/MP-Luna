@@ -3,6 +3,7 @@ import cors from "cors";
 import { ProductService } from "./services/ProductService.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { requireAdminAuth } from "./middlewares/requireAdminAuth.js";
+import { uploadVideoRoute, getUploadsRoot } from "./routes/uploadVideoRoute.js";
 
 export function createApp() {
   const app = express();
@@ -23,6 +24,10 @@ export function createApp() {
   );
 
   app.use("/api/auth", authRoutes);
+
+  app.use("/uploads", express.static(getUploadsRoot()));
+
+  app.use("/api/uploads-video", uploadVideoRoute);
 
   app.get("/api/products", async (_req, res) => {
     try {

@@ -24,6 +24,7 @@ export interface Product {
 
   image?: string | null;
   images?: string[];
+  videos?: string[];
 
   rating?: number;
   reviews?: number;
@@ -69,6 +70,7 @@ export type ProductCreateInput = {
 
   image?: string | null;
   images?: string[];
+  videos?: string[];
 
   rating?: number;
   reviewCount?: number;
