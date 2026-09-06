@@ -30,6 +30,7 @@ const ALLOWED_VIDEO_TYPES = [
   "video/x-m4v",
   "video/ogg",
 ];
+const ALLOWED_VIDEO_EXTENSIONS = [".mp4", ".webm", ".mov", ".m4v", ".ogg"];
 
 type UploadResponse = {
   url?: string;
@@ -80,7 +81,11 @@ export default function ProductMediaUpload({
   async function uploadVideoFile(file: File) {
     setVideoUploadError("");
 
-    if (!ALLOWED_VIDEO_TYPES.includes(file.type)) {
+    const extension = `.${file.name.split(".").pop()?.toLowerCase() ?? ""}`;
+    const hasAllowedType = ALLOWED_VIDEO_TYPES.includes(file.type);
+    const hasAllowedExtension = ALLOWED_VIDEO_EXTENSIONS.includes(extension);
+
+    if (!hasAllowedType && !hasAllowedExtension) {
       setVideoUploadError(
         "Formato não suportado. Use MP4, WEBM, MOV, M4V ou OGG.",
       );
@@ -107,7 +112,10 @@ export default function ProductMediaUpload({
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "/api/uploads-video");
         xhr.setRequestHeader("Authorization", `Bearer ${adminToken}`);
-        xhr.setRequestHeader("Content-Type", file.type);
+        xhr.setRequestHeader(
+          "Content-Type",
+          file.type || "application/octet-stream",
+        );
         xhr.setRequestHeader("X-File-Name", encodeURIComponent(file.name));
 
         xhr.upload.onprogress = (event) => {
@@ -135,12 +143,12 @@ export default function ProductMediaUpload({
             return;
           }
 
-          reject(
-            new Error(
-              data.message ||
-                "Não foi possível enviar o vídeo para o servidor.",
-            ),
-          );
+          const fallbackMessage =
+            xhr.status === 405
+              ? "A hospedagem atual não está aceitando a rota de upload. Na Hostinger, confirme que o projeto foi publicado como aplicação Node.js/Express, e não apenas como site estático."
+              : "Não foi possível enviar o vídeo para o servidor.";
+
+          reject(new Error(data.message || fallbackMessage));
         };
 
         xhr.send(file);

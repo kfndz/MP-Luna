@@ -22,13 +22,13 @@ const PrivacyPolicy = () => {
       {/* Content */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-3xl">
-          <h1 className="text-4xl font-bold mb-12">Política de Privacidade - MP Vertise</h1>
+          <h1 className="text-4xl font-bold mb-12">Política de Privacidade - MP Luna</h1>
 
           <div className="prose prose-sm max-w-none space-y-8 text-muted-foreground">
             <div>
               <h2 className="text-2xl font-semibold text-foreground mb-4">1. Informações que Coletamos</h2>
               <p>
-                Nós não coletamos dados financeiros ou informações sensíveis de pagamento. Por ser um catálogo de ofertas e afiliados, a MP Vertise coleta apenas informações que você fornece voluntariamente ou que são geredas durante a sua navegação: 
+                Nós não coletamos dados financeiros ou informações sensíveis de pagamento. Por ser um catálogo de ofertas e afiliados, a MP Luna coleta apenas informações que você fornece voluntariamente ou que são geredas durante a sua navegação: 
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-2">
                 <li>Dados de Contato: Nome e E-mail (caso você entre em contato conosco pelo suporte). </li>
@@ -52,7 +52,7 @@ const PrivacyPolicy = () => {
                 O nosso site contém links que redirecionam você para plataformas e lojas oficiais.
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-2">
-                <li>A MP Vertise não tem acesso, não coleta e não armazena dados que você insere nesses sites terceiros.</li>
+                <li>A MP Luna não tem acesso, não coleta e não armazena dados que você insere nesses sites terceiros.</li>
                 <li>A partir do momento em que você é redirecionado, a sua navegação e transação passam a ser regidas exclusivamente pela Política de Privacidade e pelos Termos de Uso da respectiva loja parceira onde a compra será finalizada. </li>
               </ul>
             </div>

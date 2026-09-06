@@ -23,11 +23,11 @@ import { WHATSAPP_GROUP_URL, WHATSAPP_PROMO_IMAGE } from "@/lib/whatsapp";
 const carouselImages = [
   {
     src: "/images/hero-geral.webp",
-    alt: "Vitrine inteligente da MP Vertise",
+    alt: "Vitrine inteligente da MP Luna",
   },
   {
     src: "/images/home-image.webp",
-    alt: "Seleção geral de produtos da MP Vertise",
+    alt: "Seleção geral de produtos da MP Luna",
   },
   {
     src: "/images/hero-3.webp",
@@ -95,7 +95,7 @@ const faqs = [
   {
     question: "Eu pago algo a mais para comprar por aqui?",
     answer:
-      "Não. A MP Vertise funciona como uma vitrine de produtos afiliados e não cobra taxas adicionais do usuário.",
+      "Não. A MP Luna funciona como uma vitrine de produtos afiliados e não cobra taxas adicionais do usuário.",
   },
   {
     question: "Como funciona o envio e o rastreamento?",
@@ -200,7 +200,7 @@ const Index = () => {
               {/* Carrossel */}
               <div
                 className="group relative hidden md:block"
-                aria-label="Destaques da MP Vertise"
+                aria-label="Destaques da MP Luna"
               >
                 <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
                   {carouselImages.map((image, index) => (
@@ -272,7 +272,7 @@ const Index = () => {
               <div className="bg-muted/30 p-2 sm:p-3">
                 <img
                   src={promoImg}
-                  alt="Grupo de promoções da MP Vertise no WhatsApp"
+                  alt="Grupo de promoções da MP Luna no WhatsApp"
                   className="mx-auto max-h-[560px] w-full rounded-2xl object-contain"
                 />
               </div>
@@ -283,7 +283,7 @@ const Index = () => {
                     Promoções direto no WhatsApp
                   </h2>
                   <p className="mt-1 text-sm text-muted-foreground sm:text-base">
-                    Entre no grupo para receber achados, cupons e ofertas selecionadas pela MP Vertise.
+                    Entre no grupo para receber achados, cupons e ofertas selecionadas pela MP Luna.
                   </p>
                 </div>
 
@@ -389,7 +389,7 @@ const Index = () => {
                   to="/sobre"
                   className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl border border-border bg-background px-5 py-2.5 text-sm font-semibold transition hover:border-accent hover:text-accent"
                 >
-                  Conhecer a MP Vertise
+                  Conhecer a MP Luna
                 </Link>
               </div>
             )}
@@ -400,7 +400,7 @@ const Index = () => {
         <section className="border-t border-border bg-foreground py-16 text-background md:py-24 lg:py-32">
           <div className="container mx-auto px-4">
             <SectionHeader
-              title="Por que escolher a MP Vertise"
+              title="Por que escolher a MP Luna"
               description="Organizamos produtos e oportunidades para facilitar sua pesquisa"
             />
 

@@ -50,7 +50,7 @@ export function Footer() {
         className="border-b border-background/20"
       >
         <h2 id="footer-benefits-title" className="sr-only">
-          Benefícios da MP Vertise
+          Benefícios da MP Luna
         </h2>
 
         <div className="container mx-auto px-4 py-10 sm:py-12">
@@ -239,7 +239,7 @@ export function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-4 border-t border-background/20 pt-8 text-center md:flex-row md:text-left">
           <p className="text-sm text-background/70">
-            © 2026 MP Vertise. Todos os direitos reservados.
+            © 2026 MP Luna. Todos os direitos reservados.
           </p>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">

@@ -1,8 +1,8 @@
-MP VERTISE - ALTERAÇÕES DE WHATSAPP, FOTOS E VÍDEOS
+MP LUNA - ALTERAÇÕES DE WHATSAPP, FOTOS E VÍDEOS
 
 1. IDENTIDADE VISUAL
-- A versão foi feita somente sobre a MP Vertise.
-- Header, footer, logo, cores e identidade visual originais da MP Vertise foram preservados.
+- A versão foi feita somente sobre a MP Luna.
+- Header, footer, logo, cores e identidade visual originais da MP Luna foram preservados.
 
 2. GRUPO DO WHATSAPP
 No seu .env atual, mantenha todas as configurações existentes e adicione no final:

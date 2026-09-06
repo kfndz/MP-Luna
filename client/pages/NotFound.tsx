@@ -13,7 +13,7 @@ export default function NotFound() {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    document.title = "Página não encontrada | MP Vertise";
+    document.title = "Página não encontrada | MP Luna";
 
     headingRef.current?.focus();
   }, []);

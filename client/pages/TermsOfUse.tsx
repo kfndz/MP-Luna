@@ -22,13 +22,13 @@ const TermsOfUse = () => {
       {/* Content */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-3xl">
-          <h1 className="text-4xl font-bold mb-12">Termos de Uso - MP Vertise </h1>
+          <h1 className="text-4xl font-bold mb-12">Termos de Uso - MP Luna </h1>
 
           <div className="prose prose-sm max-w-none space-y-8 text-muted-foreground">
             <div>
               <h2 className="text-2xl font-semibold text-foreground mb-4">1. Natureza do Serviço </h2>
               <p>
-                A MP Vertise opera estritamente como um catálogo digital independente e agregador de ofertas.
+                A MP Luna opera estritamente como um catálogo digital independente e agregador de ofertas.
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-2">
                 <li>Nós não realizamos vendas diretas, não faturamos pedidos, não estocamos produtos e não somos responsáveis pela entrega física de mercadorias.</li>
@@ -62,7 +62,7 @@ const TermsOfUse = () => {
             <div>
               <h2 className="text-2xl font-semibold text-foreground mb-4">4. Links Externos e Compras em Plataformas Parceiras</h2>
               <p>
-                Ao clicar em "Comprar" ou em qualquer oferta listada, você sairá do ambiente da MP Vertise.
+                Ao clicar em "Comprar" ou em qualquer oferta listada, você sairá do ambiente da MP Luna.
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-2">
                 <li>Não possuímos controle, ingerência ou responsabilidade sobre as práticas, termos, políticas de privacidade, processamento de pagamentos ou suporte técnico das lojas de destino.</li>
@@ -73,14 +73,14 @@ const TermsOfUse = () => {
             <div>
               <h2 className="text-2xl font-semibold text-foreground mb-4">5. Propriedade Intelectual</h2>
               <p>
-                Todo o design da interface, códigos, estrutura de curadoria, textos conceituais e a marca da MP Vertise são de nossa propriedade intelectual ou devidamente licenciados. As imagens dos produtos, logos das marcas e nomes comerciais exibidos pertencem aos seus respectivos fabricantes e lojistas oficiais, sendo utilizados em nosso site estritamente para fins de identificação, divulgação e indicação de afiliados.
+                Todo o design da interface, códigos, estrutura de curadoria, textos conceituais e a marca da MP Luna são de nossa propriedade intelectual ou devidamente licenciados. As imagens dos produtos, logos das marcas e nomes comerciais exibidos pertencem aos seus respectivos fabricantes e lojistas oficiais, sendo utilizados em nosso site estritamente para fins de identificação, divulgação e indicação de afiliados.
               </p>
             </div>
 
             <div>
               <h2 className="text-2xl font-semibold text-foreground mb-4">6. Limitação Geral de Responsabilidade</h2>
               <p>
-                A MP Vertise fornece o site "como está" e não oferece garantias de funcionamento ininterrupto ou livre de pequenos erros de digitação. Em nenhuma circunstância seremos responsáveis por quaisquer danos diretos, indiretos ou lucros cessantes decorrentes do uso da plataforma, de instabilidades na navegação ou de compras realizadas em sites de terceiros a partir de nossas indicações.
+                A MP Luna fornece o site "como está" e não oferece garantias de funcionamento ininterrupto ou livre de pequenos erros de digitação. Em nenhuma circunstância seremos responsáveis por quaisquer danos diretos, indiretos ou lucros cessantes decorrentes do uso da plataforma, de instabilidades na navegação ou de compras realizadas em sites de terceiros a partir de nossas indicações.
               </p>
             </div>
 

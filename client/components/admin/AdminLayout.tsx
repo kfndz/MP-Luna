@@ -84,7 +84,7 @@ export default function AdminLayout({
           </p>
 
           <h2 className="mt-3 text-2xl font-semibold text-foreground">
-            MP VERTISE
+            MP LUNA
           </h2>
         </div>
 

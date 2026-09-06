@@ -1,5 +1,5 @@
 {
-  "name": "mp-vertise",
+  "name": "mp-luna",
   "version": "1.0.0",
   "description": "Plataforma responsiva de curadoria e divulgação de produtos afiliados com painel administrativo.",
   "private": true,
@@ -11,7 +11,7 @@
     "dev": "node scripts/maybe-migrate.mjs && vite",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "postinstall": "prisma generate --schema=server/prisma/schema.prisma",
-    "build": "prisma generate --schema=./server/prisma/schema.prisma && pnpm run build:client && pnpm run build:server",
+    "build": "prisma generate --schema=./server/prisma/schema.prisma && npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "vite build --config vite.config.server.ts",
     "start": "node dist/server/node-build.mjs",

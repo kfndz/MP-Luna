@@ -156,11 +156,13 @@ export function Header() {
             <Link
               to="/"
               onClick={closeMobileMenu}
+              aria-label="Ir para a página inicial da MP Luna"
+              title="MP Luna - Início"
               className="flex min-w-0 flex-shrink-0 items-center overflow-hidden"
             >
               <img
-                src="/logo-mp.png"
-                alt="MP Vertise"
+                src="/logo-mp-luna.png"
+                alt="MP Luna"
                 className="w-[78px] h-auto object-contain sm:w-[84px] md:w-[92px] lg:w-[96px] xl:w-[108px]"
               />
             </Link>

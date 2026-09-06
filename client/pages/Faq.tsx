@@ -15,7 +15,7 @@ const Faq = () => {
     faqs: [
       {
         id: 'func-1',
-        question: 'O que é a MP Vertise?',
+        question: 'O que é a MP Luna?',
         answer: 'Nós somos uma plataforma independente de curadoria de ofertas. Nosso trabalho é vasculhar a internet para encontrar as melhores promoções, cupons e produtos bem avaliados das maiores lojas do Brasil, reunindo tudo em um só lugar para você economizar tempo e dinheiro.',
       },
       {
@@ -91,7 +91,7 @@ const Faq = () => {
       {
         id: 'seguranca-2',
         question: 'Vocês guardam meus dados de cartão ou documentos?',
-        answer: 'Não. A MP Vertise não possui sistema de checkout. Suas informações cadastrais e financeiras nunca passam pelo nosso servidor, permanecendo totalmente protegidas sob os protocolos de segurança bancária das grandes redes varejistas.',
+        answer: 'Não. A MP Luna não possui sistema de checkout. Suas informações cadastrais e financeiras nunca passam pelo nosso servidor, permanecendo totalmente protegidas sob os protocolos de segurança bancária das grandes redes varejistas.',
       },
     ],
   },

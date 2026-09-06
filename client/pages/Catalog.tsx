@@ -103,7 +103,7 @@ const Catalog = () => {
           <p className="max-w-2xl text-lg text-muted-foreground">
             {query
               ? `Resultados para “${query}”`
-              : "Explore os produtos disponíveis na MP Vertise"}
+              : "Explore os produtos disponíveis na MP Luna"}
           </p>
         </div>
       </section>

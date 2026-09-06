@@ -7,7 +7,7 @@ import { requireAdminAuth } from "../middlewares/requireAdminAuth.js";
 
 const router = Router();
 
-const MAX_VIDEO_SIZE = 500 * 1024 * 1024;
+const DEFAULT_MAX_VIDEO_SIZE_MB = 500;
 const ALLOWED_VIDEO_TYPES = new Set([
   "video/mp4",
   "video/webm",
@@ -23,6 +23,24 @@ const EXTENSION_BY_TYPE: Record<string, string> = {
   "video/x-m4v": ".m4v",
   "video/ogg": ".ogg",
 };
+
+const TYPE_BY_EXTENSION: Record<string, string> = {
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".mov": "video/quicktime",
+  ".m4v": "video/x-m4v",
+  ".ogg": "video/ogg",
+};
+
+function getMaxVideoSize() {
+  const configuredMb = Number(process.env.MAX_VIDEO_UPLOAD_MB);
+  const maxMb =
+    Number.isFinite(configuredMb) && configuredMb > 0
+      ? configuredMb
+      : DEFAULT_MAX_VIDEO_SIZE_MB;
+
+  return Math.floor(maxMb * 1024 * 1024);
+}
 
 function getUploadsRoot() {
   return path.resolve(
@@ -40,41 +58,104 @@ function sanitizeBaseName(value: string) {
     .slice(0, 120);
 }
 
-router.post("/", requireAdminAuth, async (req, res) => {
-  const contentType = String(req.headers["content-type"] || "")
+function getDecodedFileName(headerValue: unknown) {
+  const rawNameHeader = String(headerValue || "video");
+
+  try {
+    return decodeURIComponent(rawNameHeader);
+  } catch {
+    return rawNameHeader;
+  }
+}
+
+function resolveVideoFormat(contentTypeHeader: unknown, fileName: string) {
+  const declaredType = String(contentTypeHeader || "")
     .split(";")[0]
     .trim()
     .toLowerCase();
+  const extension = path.extname(fileName).toLowerCase();
 
-  if (!ALLOWED_VIDEO_TYPES.has(contentType)) {
+  if (ALLOWED_VIDEO_TYPES.has(declaredType)) {
+    return {
+      contentType: declaredType,
+      extension: EXTENSION_BY_TYPE[declaredType],
+    };
+  }
+
+  const typeFromExtension = TYPE_BY_EXTENSION[extension];
+  if (typeFromExtension) {
+    return {
+      contentType: typeFromExtension,
+      extension,
+    };
+  }
+
+  return null;
+}
+
+// Permite validar na Hostinger se a pasta persistente está gravável.
+router.get("/status", requireAdminAuth, async (_req, res) => {
+  const videosDir = path.join(getUploadsRoot(), "videos");
+  const probePath = path.join(
+    videosDir,
+    `.write-test-${Date.now()}-${crypto.randomBytes(3).toString("hex")}`,
+  );
+
+  try {
+    await fs.promises.mkdir(videosDir, { recursive: true });
+    await fs.promises.writeFile(probePath, "ok", { flag: "wx" });
+    await fs.promises.unlink(probePath);
+
+    return res.json({
+      ok: true,
+      uploadsDir: videosDir,
+      maxVideoSizeMb: Math.round(getMaxVideoSize() / 1024 / 1024),
+    });
+  } catch (error) {
+    console.error("Pasta de upload sem permissão de escrita:", error);
+
+    return res.status(500).json({
+      ok: false,
+      message:
+        "A pasta de vídeos não está gravável. Configure UPLOADS_DIR para uma pasta persistente com permissão de escrita.",
+    });
+  }
+});
+
+router.post("/", requireAdminAuth, async (req, res) => {
+  const decodedName = getDecodedFileName(req.headers["x-file-name"]);
+  const format = resolveVideoFormat(req.headers["content-type"], decodedName);
+
+  if (!format) {
     return res.status(415).json({
       message: "Formato não suportado. Use MP4, WEBM, MOV, M4V ou OGG.",
     });
   }
 
+  const maxVideoSize = getMaxVideoSize();
   const declaredLength = Number(req.headers["content-length"] || 0);
-  if (declaredLength > MAX_VIDEO_SIZE) {
+  if (declaredLength > maxVideoSize) {
     return res.status(413).json({
-      message: "O vídeo deve ter no máximo 500 MB.",
+      message: `O vídeo deve ter no máximo ${Math.round(maxVideoSize / 1024 / 1024)} MB.`,
     });
-  }
-
-  const rawNameHeader = String(req.headers["x-file-name"] || "video");
-  let decodedName = "video";
-
-  try {
-    decodedName = decodeURIComponent(rawNameHeader);
-  } catch {
-    decodedName = rawNameHeader;
   }
 
   const parsed = path.parse(decodedName);
   const safeBase = sanitizeBaseName(parsed.name) || "video";
-  const extension = EXTENSION_BY_TYPE[contentType] || ".mp4";
-  const uniqueName = `${Date.now()}-${crypto.randomBytes(5).toString("hex")}-${safeBase}${extension}`;
+  const uniqueName = `${Date.now()}-${crypto.randomBytes(5).toString("hex")}-${safeBase}${format.extension}`;
 
   const videosDir = path.join(getUploadsRoot(), "videos");
-  await fs.promises.mkdir(videosDir, { recursive: true });
+
+  try {
+    await fs.promises.mkdir(videosDir, { recursive: true });
+  } catch (error) {
+    console.error("Erro ao preparar pasta de vídeos:", error);
+
+    return res.status(500).json({
+      message:
+        "Não foi possível preparar a pasta de vídeos. Verifique as permissões de escrita do servidor.",
+    });
+  }
 
   const absolutePath = path.join(videosDir, uniqueName);
   const output = fs.createWriteStream(absolutePath, { flags: "wx" });
@@ -93,7 +174,7 @@ router.post("/", requireAdminAuth, async (req, res) => {
   req.on("data", (chunk: Buffer) => {
     receivedBytes += chunk.length;
 
-    if (receivedBytes > MAX_VIDEO_SIZE && !finished) {
+    if (receivedBytes > maxVideoSize && !finished) {
       finished = true;
       req.unpipe(output);
       output.destroy();
@@ -101,7 +182,7 @@ router.post("/", requireAdminAuth, async (req, res) => {
 
       if (!res.headersSent) {
         res.status(413).json({
-          message: "O vídeo deve ter no máximo 500 MB.",
+          message: `O vídeo deve ter no máximo ${Math.round(maxVideoSize / 1024 / 1024)} MB.`,
         });
       }
 
@@ -117,6 +198,20 @@ router.post("/", requireAdminAuth, async (req, res) => {
     }
   });
 
+  req.on("error", async (error) => {
+    if (finished) return;
+    finished = true;
+    output.destroy();
+    await cleanupPartialFile();
+    console.error("Erro durante o recebimento do vídeo:", error);
+
+    if (!res.headersSent) {
+      res.status(500).json({
+        message: "A conexão foi interrompida durante o envio do vídeo.",
+      });
+    }
+  });
+
   output.on("error", async (error) => {
     if (finished) return;
     finished = true;
@@ -125,7 +220,8 @@ router.post("/", requireAdminAuth, async (req, res) => {
 
     if (!res.headersSent) {
       res.status(500).json({
-        message: "Não foi possível salvar o vídeo no servidor.",
+        message:
+          "Não foi possível salvar o vídeo no servidor. Verifique o espaço em disco e as permissões da pasta de uploads.",
       });
     }
   });
@@ -138,7 +234,7 @@ router.post("/", requireAdminAuth, async (req, res) => {
       url: `/uploads/videos/${uniqueName}`,
       fileName: uniqueName,
       size: receivedBytes,
-      contentType,
+      contentType: format.contentType,
     });
   });
 

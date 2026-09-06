@@ -1,0 +1,29 @@
+MP LUNA — ATUALIZAÇÃO 06/09/2026
+
+1. BRANDING
+- Todo texto visível da marca anterior foi alterado para "MP Luna".
+- Título, metadados, manifesto, páginas institucionais, rodapé e painel foram atualizados.
+- Nova logo MP Luna adicionada em public/logo-mp-luna.png.
+- A logo antiga do cabeçalho foi removida.
+- A logo do cabeçalho é um link explícito para a Home (/).
+
+2. META PIXEL
+- Pixel ID 1442653917680644 inserido no <head> do index.html.
+- O snippet registra o PageView inicial.
+- MetaPixelPageView.tsx registra PageView nas navegações internas do React Router sem duplicar o primeiro carregamento.
+
+3. VÍDEOS / HOSTINGER
+- Upload continua sendo feito diretamente para o próprio servidor, sem Vercel Blob, Cloudinary ou S3.
+- Arquivos são gravados em storage/uploads/videos por padrão.
+- UPLOADS_DIR pode apontar para uma pasta persistente da hospedagem.
+- Formatos: MP4, WEBM, MOV, M4V e OGG.
+- Limite padrão: 500 MB, configurável com MAX_VIDEO_UPLOAD_MB.
+- Melhorado suporte a arquivos cujo navegador envia Content-Type genérico.
+- Melhoradas mensagens de erro de permissão/espaço em disco.
+- GET /api/uploads-video/status permite validar se a pasta está gravável (requer token de admin).
+- Em produção, os arquivos são servidos pela rota /uploads.
+
+4. BUILD
+- O build não depende mais do comando pnpm internamente; npm run build pode ser usado diretamente.
+
+Veja HOSTINGER-DEPLOY.md para as instruções de publicação e validação.

@@ -22,7 +22,7 @@ const About = () => {
       {/* Hero */}
       <section className="py-12 md:py-20 border-b border-border bg-gradient-to-br from-muted/50 to-background">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Sobre a MP Vertise</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Sobre a MP Luna</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Sua vitrine inteligente de ofertas. Vasculhamos a internet diariamente para selecionar as melhores oportunidades e promoções das maiores e mais confiáveis lojas do Brasil, ajudando você a economizar tempo e dinheiro em cada clique.
           </p>
